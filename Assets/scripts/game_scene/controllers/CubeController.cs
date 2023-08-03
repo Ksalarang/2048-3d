@@ -1,5 +1,4 @@
-﻿using System;
-using game_scene.models;
+﻿using game_scene.models;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
@@ -64,11 +63,18 @@ public class CubeController : MonoBehaviour {
     public void onCubeCollision(Cube cube1, Cube cube2) {
         var midPoint = cube1.transform.position.midPoint(cube2.transform.position);
         var number = cube1.number * 2;
+        var force = cube1.rigidBody.velocity + cube2.rigidBody.velocity;
+        var torque = cube1.rigidBody.angularVelocity + cube2.rigidBody.angularVelocity;
         cubeProvider.releaseCube(cube1);
         cubeProvider.releaseCube(cube2);
         var cube = cubeProvider.getCube(number);
         cube.transform.position = midPoint;
-        cube.launch(settings.throwForce);
+        force += settings.throwForce;
+        log.log($"force: {force}");
+        force = MathUtils.clamp(force, -settings.maxVelocity, settings.maxVelocity);
+        log.log($"clamped force: {force}");
+        cube.rigidBody.AddForce(force, ForceMode.VelocityChange);
+        cube.rigidBody.AddTorque(torque);
     }
 
     public void onTouchStartLine() {

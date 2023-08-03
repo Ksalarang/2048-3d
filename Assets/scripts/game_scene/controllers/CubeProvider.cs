@@ -32,11 +32,12 @@ public class CubeProvider : MonoBehaviour {
     }
 
     void onCubeGet(Cube cube) {
+        cube.reset();
         cube.gameObject.SetActive(true);
     }
 
     void onCubeRelease(Cube cube) {
-        cube.reset();
+        cube.state = CubeState.Destroyed;
         cube.gameObject.SetActive(false);
     }
 
@@ -54,16 +55,12 @@ public class CubeProvider : MonoBehaviour {
     }
 
     public void releaseCube(Cube cube) {
-        try {
-            cubePool.Release(cube);
-        } catch (InvalidOperationException e) {
-            log.error($"{e.Message}, {cube}");
-        }
+        if (cube.state != CubeState.Destroyed) cubePool.Release(cube);
     }
 
     public void reset() {
         foreach (var cube in cubes) {
-            cubePool.Release(cube);
+            if (cube.state != CubeState.Destroyed) cubePool.Release(cube);
         }
     }
 }

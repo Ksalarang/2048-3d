@@ -22,17 +22,16 @@ public class Cube : MonoBehaviour {
 
     [Inject] CubeController cubeController;
     
-    Rigidbody rigidBody;
     List<TMP_Text> labels;
     bool gameOver;
 
+    [HideInInspector] public Rigidbody rigidBody;
     [HideInInspector] public CubeState state = CubeState.NotLaunched;
 
     public long number;
     
     void Awake() {
         rigidBody = GetComponent<Rigidbody>();
-        rigidBody.freezeRotation = true;
         addLabels();
         count++;
     }
@@ -76,6 +75,7 @@ public class Cube : MonoBehaviour {
     public void reset() {
         transform.rotation = rigidBody.rotation = Quaternion.identity;
         rigidBody.velocity = rigidBody.angularVelocity = Vector3.zero;
+        rigidBody.freezeRotation = true;
         state = CubeState.NotLaunched;
         gameOver = false;
     }
