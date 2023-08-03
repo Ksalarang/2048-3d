@@ -29,8 +29,10 @@ public class CubeController : MonoBehaviour {
         createCube();
     }
 
+    int power = 1;
+    
     void createCube() {
-        var number = RandomUtils.nextItem(numbers);
+        var number = (long) Mathf.Pow(2, power++);
         var cube = cubeProvider.getCube(number);
         cube.transform.position = settings.initialPosition;
         currentCube = cube;

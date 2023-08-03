@@ -16,7 +16,7 @@ public class CubeProvider : MonoBehaviour {
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
-    public Cube getCube(int number) {
+    public Cube getCube(long number) {
         var cube = diContainer.InstantiatePrefabForComponent<Cube>(cubePrefab, container.transform);
         cube.name = $"cube{++cubeCount}_{number}";
         cube.setNumber(number);
