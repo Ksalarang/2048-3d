@@ -10,6 +10,7 @@ namespace game_scene.models {
 public class Cube : MonoBehaviour {
     const float MaxFontSize = 0.7f;
     const float FontSizeStep = 0.1f;
+    static int count;
     readonly string[] suffixes = { "", "k", "m", "b" };
 
     [SerializeField] TMP_Text backLabel;
@@ -23,15 +24,17 @@ public class Cube : MonoBehaviour {
     
     Rigidbody rigidBody;
     List<TMP_Text> labels;
+    bool gameOver;
 
     [HideInInspector] public CubeState state = CubeState.NotLaunched;
 
-    public long number { get; private set; }
+    public long number;
     
     void Awake() {
         rigidBody = GetComponent<Rigidbody>();
         rigidBody.freezeRotation = true;
         addLabels();
+        count++;
     }
 
     void addLabels() {
@@ -70,15 +73,30 @@ public class Cube : MonoBehaviour {
         rigidBody.AddForce(force, ForceMode.Impulse);
     }
 
+    public void reset() {
+        transform.rotation = rigidBody.rotation = Quaternion.identity;
+        rigidBody.velocity = rigidBody.angularVelocity = Vector3.zero;
+        state = CubeState.NotLaunched;
+        gameOver = false;
+    }
+
+    public override string ToString() => $"cube{count}_{number}";
+
     void OnCollisionEnter(Collision other) {
-        if (state is CubeState.Collided or CubeState.Destroyed) return;
+        if (gameOver) return;
         var otherCube = other.gameObject.GetComponent<Cube>();
         if (!otherCube) return;
         rigidBody.freezeRotation = false;
-        if (otherCube.state is CubeState.Collided or CubeState.Destroyed) return;
         if (number == otherCube.number) {
             cubeController.onCubeCollision(this, otherCube);
-            state = otherCube.state = CubeState.Collided;
+        }
+    }
+
+    void OnTriggerStay(Collider other) {
+        if (gameOver) return;
+        if (other.gameObject.CompareTag("StartLine") && rigidBody.velocity.magnitude < 0.1f) {
+            gameOver = true;
+            cubeController.onTouchStartLine();
         }
     }
 }

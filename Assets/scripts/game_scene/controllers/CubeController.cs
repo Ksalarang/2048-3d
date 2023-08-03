@@ -8,6 +8,7 @@ using Zenject;
 namespace game_scene.controllers {
 public class CubeController : MonoBehaviour {
     [Inject] CubeProvider cubeProvider;
+    [Inject] GameController gameController;
     [Inject] CubeSettings settings;
     [Inject(Id = ObjectId.Floor)] GameObject floor;
 
@@ -25,11 +26,11 @@ public class CubeController : MonoBehaviour {
         minX = -maxX;
     }
 
-    void Start() {
+    public void start() {
         createCube();
     }
 
-    int power = 1;
+    // int power = 1;
     
     void createCube() {
         // var number = (long) Mathf.Pow(2, power++);
@@ -62,12 +63,16 @@ public class CubeController : MonoBehaviour {
 
     public void onCubeCollision(Cube cube1, Cube cube2) {
         var midPoint = cube1.transform.position.midPoint(cube2.transform.position);
-        var number = cube1.number * cube1.number;
-        Destroy(cube1.gameObject);
-        Destroy(cube2.gameObject);
+        var number = cube1.number * 2;
+        cubeProvider.releaseCube(cube1);
+        cubeProvider.releaseCube(cube2);
         var cube = cubeProvider.getCube(number);
         cube.transform.position = midPoint;
         cube.launch(settings.throwForce);
+    }
+
+    public void onTouchStartLine() {
+        gameController.onGameOver();
     }
 }
 }
