@@ -11,6 +11,7 @@ public class GameSettings : MonoBehaviour {
 public class CubeSettings {
     public Vector3 initialPosition;
     public Vector3 launchForce;
+    public Vector3 throwForce;
     public float spawnDelay;
 }
 }

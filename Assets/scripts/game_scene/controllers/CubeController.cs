@@ -32,7 +32,8 @@ public class CubeController : MonoBehaviour {
     int power = 1;
     
     void createCube() {
-        var number = (long) Mathf.Pow(2, power++);
+        // var number = (long) Mathf.Pow(2, power++);
+        var number = RandomUtils.nextItem(numbers);
         var cube = cubeProvider.getCube(number);
         cube.transform.position = settings.initialPosition;
         currentCube = cube;
@@ -57,6 +58,16 @@ public class CubeController : MonoBehaviour {
             createCube();
         }));
         currentCube = null;
+    }
+
+    public void onCubeCollision(Cube cube1, Cube cube2) {
+        var midPoint = cube1.transform.position.midPoint(cube2.transform.position);
+        var number = cube1.number * cube1.number;
+        Destroy(cube1.gameObject);
+        Destroy(cube2.gameObject);
+        var cube = cubeProvider.getCube(number);
+        cube.transform.position = midPoint;
+        cube.launch(settings.throwForce);
     }
 }
 }

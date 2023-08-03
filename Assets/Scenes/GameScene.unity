@@ -241,6 +241,7 @@ MonoBehaviour:
   cubeSettings:
     initialPosition: {x: 0, y: 0.5, z: -4}
     launchForce: {x: 0, y: 0, z: 10}
+    throwForce: {x: 0, y: 4, z: 0}
     spawnDelay: 0.3
 --- !u!4 &297898668
 Transform:

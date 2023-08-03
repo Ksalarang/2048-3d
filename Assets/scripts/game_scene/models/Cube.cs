@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using game_scene.controllers;
 using TMPro;
 using UnityEngine;
 using Utils;
+using Zenject;
 
 namespace game_scene.models {
 public class Cube : MonoBehaviour {
@@ -16,6 +18,8 @@ public class Cube : MonoBehaviour {
     [SerializeField] TMP_Text rightLabel;
     [SerializeField] TMP_Text topLabel;
     [SerializeField] TMP_Text bottomLabel;
+
+    [Inject] CubeController cubeController;
     
     Rigidbody rigidBody;
     List<TMP_Text> labels;
@@ -67,9 +71,15 @@ public class Cube : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision other) {
-        if (other.gameObject.CompareTag("Plane")) return;
-        state = CubeState.Collided;
+        if (state is CubeState.Collided or CubeState.Destroyed) return;
+        var otherCube = other.gameObject.GetComponent<Cube>();
+        if (!otherCube) return;
         rigidBody.freezeRotation = false;
+        if (otherCube.state is CubeState.Collided or CubeState.Destroyed) return;
+        if (number == otherCube.number) {
+            cubeController.onCubeCollision(this, otherCube);
+            state = otherCube.state = CubeState.Collided;
+        }
     }
 }
 
@@ -77,5 +87,6 @@ public enum CubeState {
     NotLaunched,
     Launched,
     Collided,
+    Destroyed,
 }
 }
