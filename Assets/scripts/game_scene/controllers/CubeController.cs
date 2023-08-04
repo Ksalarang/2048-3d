@@ -1,4 +1,5 @@
 ﻿using game_scene.models;
+using services.vibrations;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
@@ -10,6 +11,7 @@ public class CubeController : MonoBehaviour {
     [Inject] GameController gameController;
     [Inject] CubeSettings settings;
     [Inject(Id = ObjectId.Floor)] GameObject floor;
+    [Inject] VibrationService vibrationService;
 
     Log log;
     readonly int[] numbers = { 2, 4, 8, 16, 32, 64 };
@@ -79,6 +81,7 @@ public class CubeController : MonoBehaviour {
         force = MathUtils.clamp(force, -settings.maxVelocity, settings.maxVelocity);
         cube.rigidBody.AddForce(force, ForceMode.VelocityChange);
         cube.rigidBody.AddTorque(torque);
+        vibrationService.vibrate(VibrationType.Medium);
     }
 
     public void onTouchStartLine() {
