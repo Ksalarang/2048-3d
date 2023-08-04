@@ -12,7 +12,7 @@ public class CubeController : MonoBehaviour {
     [Inject(Id = ObjectId.Floor)] GameObject floor;
 
     Log log;
-    readonly int[] numbers = { 2, 4, 8, 16 };
+    readonly int[] numbers = { 2, 4, 8, 16, 32, 64 };
     Cube currentCube;
     float minX;
     float maxX;
@@ -29,14 +29,17 @@ public class CubeController : MonoBehaviour {
         createCube();
     }
 
-    // int power = 1;
-    
     void createCube() {
-        // var number = (long) Mathf.Pow(2, power++);
-        var number = RandomUtils.nextItem(numbers);
+        var number = nextNumber();
         var cube = cubeProvider.getCube(number);
         cube.transform.position = settings.initialPosition;
         currentCube = cube;
+    }
+
+    int nextNumber() {
+        var max = RandomUtils.nextBool() ? numbers.Length / 2 : numbers.Length;
+        var i = RandomUtils.nextInt(0, max);
+        return numbers[i];
     }
 
     public void onHorizontalShift(float deltaX) {
@@ -70,9 +73,7 @@ public class CubeController : MonoBehaviour {
         var cube = cubeProvider.getCube(number);
         cube.transform.position = midPoint;
         force += settings.throwForce;
-        log.log($"force: {force}");
         force = MathUtils.clamp(force, -settings.maxVelocity, settings.maxVelocity);
-        log.log($"clamped force: {force}");
         cube.rigidBody.AddForce(force, ForceMode.VelocityChange);
         cube.rigidBody.AddTorque(torque);
     }
