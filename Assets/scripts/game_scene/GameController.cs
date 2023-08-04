@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour {
         cubeController.start();
     }
 
-    public void onGameOver() {
+    public void onTouchStartLine() {
         log.log("game over");
         startNewGame();
     }

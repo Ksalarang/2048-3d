@@ -206,6 +206,7 @@ MonoBehaviour:
   cubeController: {fileID: 636771359}
   inputController: {fileID: 636771362}
   floor: {fileID: 1165729965}
+  startLine: {fileID: 1556257869}
   cubePrefab: {fileID: 408372526947000674, guid: a86641fc7f642444ca1b3702d10f0764,
     type: 3}
   camera: {fileID: 330585545}
@@ -240,8 +241,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cubeSettings:
     initialPosition: {x: 0, y: 0.5, z: -5}
-    launchForce: {x: 0, y: 0, z: 10}
-    throwForce: {x: 0, y: 4, z: 0}
+    launchForce: {x: 0, y: 0, z: 12}
+    throwForce: {x: 0, y: 5, z: 0}
     maxVelocity: {x: 10, y: 10, z: 10}
     spawnDelay: 0.3
 --- !u!4 &297898668

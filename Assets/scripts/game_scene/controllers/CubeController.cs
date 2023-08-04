@@ -82,7 +82,7 @@ public class CubeController : MonoBehaviour {
     }
 
     public void onTouchStartLine() {
-        gameController.onGameOver();
+        gameController.onTouchStartLine();
     }
 }
 }

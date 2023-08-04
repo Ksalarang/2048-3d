@@ -16,6 +16,7 @@ public class GameInstaller : MonoInstaller {
     [SerializeField] InputController inputController;
     [Header("Objects")]
     [SerializeField] GameObject floor;
+    [SerializeField] GameObject startLine;
     [Header("Prefabs")]
     [SerializeField] GameObject cubePrefab;
     [Header("Misc")]
@@ -30,6 +31,7 @@ public class GameInstaller : MonoInstaller {
         bind(inputController);
         // objects
         bind(floor, ObjectId.Floor);
+        bind(startLine, ObjectId.StartLine);
         // prefabs
         bind(cubePrefab, PrefabId.Cube);
         // settings
@@ -49,6 +51,7 @@ public class GameInstaller : MonoInstaller {
 
 public enum ObjectId {
     Floor,
+    StartLine,
 }
 
 public enum PrefabId {

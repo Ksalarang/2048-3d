@@ -3,12 +3,14 @@ using game_scene.models;
 using UnityEngine;
 using UnityEngine.Pool;
 using Utils;
+using utils.structs;
 using Zenject;
 using Random = System.Random;
 
 namespace game_scene.controllers {
 public class CubeProvider : MonoBehaviour {
     [Inject(Id = PrefabId.Cube)] GameObject cubePrefab;
+    [Inject(Id = ObjectId.StartLine)] GameObject startLine;
     [Inject] DiContainer diContainer;
 
     Log log;
@@ -17,6 +19,7 @@ public class CubeProvider : MonoBehaviour {
     ObjectPool<Cube> cubePool;
     int cubeCount;
     ColorGenerator colorGenerator;
+    FloatRange cubeSlowDownZRange;
 
     void Awake() {
         log = new Log(GetType());
@@ -24,11 +27,16 @@ public class CubeProvider : MonoBehaviour {
         cubes = new List<Cube>();
         cubePool = new ObjectPool<Cube>(createCube, onCubeGet, onCubeRelease, onCubeDestroy, true, 32, 64);
         colorGenerator = new ColorGenerator();
+        cubeSlowDownZRange = new FloatRange(
+            startLine.transform.position.z + startLine.transform.localScale.z * 10 / 2 + 0.5f,
+            1f
+        );
     }
 
     #region cube pooling
     Cube createCube() {
         var cube = diContainer.InstantiatePrefabForComponent<Cube>(cubePrefab, container.transform);
+        cube.setZRange(cubeSlowDownZRange);
         cubes.Add(cube);
         return cube;
     }

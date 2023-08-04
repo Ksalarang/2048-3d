@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using game_scene.controllers;
 using TMPro;
 using UnityEngine;
+using Utils.Extensions;
+using utils.structs;
 using Zenject;
 
 namespace game_scene.models {
@@ -21,8 +24,10 @@ public class Cube : MonoBehaviour {
     [Inject] CubeController cubeController;
 
     new MeshRenderer renderer;
+    new Transform transform;
     List<TMP_Text> labels;
     bool gameOver;
+    FloatRange zRange;
 
     [HideInInspector] public Rigidbody rigidBody;
     [HideInInspector] public CubeState state = CubeState.NotLaunched;
@@ -32,6 +37,7 @@ public class Cube : MonoBehaviour {
     void Awake() {
         rigidBody = GetComponent<Rigidbody>();
         renderer = GetComponent<MeshRenderer>();
+        transform = base.transform;
         addLabels();
         count++;
     }
@@ -46,12 +52,23 @@ public class Cube : MonoBehaviour {
         labels.Add(bottomLabel);
     }
 
+    void Update() {
+        var velocity = rigidBody.velocity;
+        var positionZ = transform.position.z;
+        if (velocity.z < 0 && positionZ > zRange.min) {
+            var proximityFactor = 1 - Mathf.Abs(Mathf.Clamp01((positionZ - zRange.min) / (zRange.max - zRange.min)));
+            rigidBody.velocity = new Vector3(velocity.x, velocity.y, velocity.z + proximityFactor);
+        }
+    }
+
+    public void setZRange(FloatRange range) {
+        zRange = range;
+    }
+
     public void setNumber(long number) {
         this.number = number;
         updateLabels();
     }
-
-    public void setColor(Color color) => renderer.material.color = color;
 
     void updateLabels() {
         var n = number;
@@ -68,6 +85,8 @@ public class Cube : MonoBehaviour {
             label.fontSize = fontSize;
         }
     }
+
+    public void setColor(Color color) => renderer.material.color = color;
 
     public void launch(Vector3 force) {
         state = CubeState.Launched;
