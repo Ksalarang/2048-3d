@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using game_scene.controllers;
 using TMPro;
 using UnityEngine;
-using Utils;
 using Zenject;
 
 namespace game_scene.models {
@@ -21,7 +19,8 @@ public class Cube : MonoBehaviour {
     [SerializeField] TMP_Text bottomLabel;
 
     [Inject] CubeController cubeController;
-    
+
+    new MeshRenderer renderer;
     List<TMP_Text> labels;
     bool gameOver;
 
@@ -32,6 +31,7 @@ public class Cube : MonoBehaviour {
     
     void Awake() {
         rigidBody = GetComponent<Rigidbody>();
+        renderer = GetComponent<MeshRenderer>();
         addLabels();
         count++;
     }
@@ -50,6 +50,8 @@ public class Cube : MonoBehaviour {
         this.number = number;
         updateLabels();
     }
+
+    public void setColor(Color color) => renderer.material.color = color;
 
     void updateLabels() {
         var n = number;

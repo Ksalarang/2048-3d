@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using game_scene.controllers;
+﻿using game_scene.controllers;
 using UnityEngine;
 using Utils;
 using Zenject;

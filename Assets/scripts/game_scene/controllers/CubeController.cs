@@ -36,7 +36,10 @@ public class CubeController : MonoBehaviour {
         currentCube = cube;
     }
 
-    int nextNumber() {
+    // int power;
+    
+    long nextNumber() {
+        // return (long) Mathf.Pow(2, ++power);
         var max = RandomUtils.nextBool() ? numbers.Length / 2 : numbers.Length;
         var i = RandomUtils.nextInt(0, max);
         return numbers[i];
