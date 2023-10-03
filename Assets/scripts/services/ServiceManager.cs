@@ -2,7 +2,6 @@
 using init_scene;
 using services.saves;
 using services.scenes;
-using services.sounds;
 using services.vibrations;
 using UnityEngine;
 using Utils;
@@ -14,7 +13,6 @@ public class ServiceManager: MonoBehaviour {
     [Inject] LogConfig logConfig;
     
     [Inject] SceneService sceneService;
-    [Inject] SoundService soundService;
     [Inject] VibrationService vibrationService;
     [Inject] SaveService saveService;
 
@@ -32,7 +30,6 @@ public class ServiceManager: MonoBehaviour {
     void registerServices() {
         log.log("register services");
         registerService(sceneService);
-        registerService(soundService);
         registerService(vibrationService);
         registerService(saveService);
         onSavesLoaded();

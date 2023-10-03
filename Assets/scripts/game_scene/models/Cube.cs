@@ -125,7 +125,6 @@ public class Cube : MonoBehaviour {
 public enum CubeState {
     NotLaunched,
     Launched,
-    Collided,
     Destroyed,
 }
 }
